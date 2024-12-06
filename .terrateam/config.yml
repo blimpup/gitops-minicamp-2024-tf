@@ -19,9 +19,9 @@ workflows:
     plan:
       - type: run
         cmd: ['${TERRATEAM_TF_CMD}', 'fmt', '-check']
+      - type: init      
       - type: run
         cmd: ['${TERRATEAM_TF_CMD}', 'validate']
-      - type: init
       - type: plan
 
 cost_estimation:
