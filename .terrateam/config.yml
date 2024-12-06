@@ -1,3 +1,7 @@
+access_control:
+  files:
+    'policies/gcp/compute-instance.rego': ['team:sre']
+
 engine:
   name: tofu
 
@@ -9,23 +13,14 @@ hooks:
     post:
       - type: run
         cmd: ['conftest', 'test', '-o', 'table', '${TERRATEAM_TMPDIR}/infracost/infracost.json', '--policy', '$TERRATEAM_ROOT/policies/gcp/compute-instance.rego']
-        capture_output: true
 
 workflows:
-  - tag_query: "dir:staging"
+  - tag_query: ""
     plan:
       - type: run
-        cmd: ['${TERRATEAM_TF_CMD}', 'fmt']
+        cmd: ['${TERRATEAM_TF_CMD}', 'fmt', '-check']
       - type: run
         cmd: ['${TERRATEAM_TF_CMD}', 'validate']
-      - type: init
-      - type: plan
-  - tag_query: "dir:production"
-    plan:
-      - type: run
-        cmd: ['${TERRATEAM_TF_CMD}', 'fmt']
-      - type: run
-        cmd: ['${TERATEAM_TF_CMD}', 'validate']
       - type: init
       - type: plan
 
@@ -34,10 +29,9 @@ cost_estimation:
 
 apply_requirements:
   checks:
-    - tag_query: "dir:staging"
+    - tag_query: "dir:dev"
       approved:
-        enabled: true
-        any_of_count: 1
+        enabled: false
     - tag_query: "dir:production"
       approved:
         enabled: true
