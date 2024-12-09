@@ -1,9 +1,8 @@
-access_control:
-  files:
-    'policies/gcp/compute-instance.rego': ['team:sre']
-
 engine:
   name: tofu
+
+cost_estimation:
+  enabled: true
 
 indexer:
   enabled: true
@@ -24,9 +23,6 @@ workflows:
         cmd: ['${TERRATEAM_TF_CMD}', 'validate']
       - type: plan
 
-cost_estimation:
-  enabled: true
-
 apply_requirements:
   checks:
     - tag_query: "dir:dev"
@@ -41,3 +37,15 @@ apply_requirements:
 drift:
   enabled: true
   schedule: hourly
+
+# Enterprise feature
+access_control:
+  terrateam_config_update: ['team:sre']
+  ci_config_update: ['team:sre']
+  files:
+    'policies/gcp/compute-instance.rego': ['team:sre']
+  policies:
+    - tag_query: 'dir:dev'
+      plan: ['*']
+      apply: ['*']
+
