@@ -1,6 +1,4 @@
-access_control:
-  files:
-    'policies/gcp/compute-instance.rego': ['team:sre']
+
 
 engine:
   name: tofu
@@ -38,3 +36,15 @@ apply_requirements:
 drift:
   enabled: true
   schedule: hourly
+
+# Enterprise/SaaS feature
+access_control:
+  ci_config_update: ['team:sre']
+  terrateam_config_update: ['team:sre']
+  files:
+    'policies/gcp/compute-instance.rego': ['team:sre']
+  policies:
+    - tag_query: 'dir:dev'
+      plan: ['*']
+      apply: ['*']
+    - tag_query: 'dir:prod'
