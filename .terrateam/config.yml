@@ -5,9 +5,6 @@ access_control:
 engine:
   name: tofu
 
-indexer:
-  enabled: true
-
 hooks:
   plan:
     post:
