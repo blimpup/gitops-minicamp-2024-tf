@@ -95,3 +95,7 @@ resource "aws_instance" "grafana_server" {
     Name = "grafana-server"
   }
 }
+
+module "shared" {
+  source = "../modules/shared"
+}
